@@ -3,13 +3,12 @@ from rest_framework import serializers
 from models import Thread
 
 
-class ThreadSerializer(serializers.HyperlinkedModelSerializer):
+class ThreadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Thread
-        fields = ('url', 'title', 'created', 'author')
+        fields = ('id', 'title', 'created')
 
-
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('url', 'username')
