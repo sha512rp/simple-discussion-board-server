@@ -37,8 +37,8 @@ class ThreadDetail(APIView):
     def get_object(self, pk):
         try:
             return Thread.objects.get(pk=pk)
-        except Thread.DoesNotExists:
-            raiseHttp404
+        except Thread.DoesNotExist:
+            raise Http404
 
     def get(self, request, pk, format=None):
         thread = self.get_object(pk)
@@ -60,10 +60,16 @@ class ThreadDetail(APIView):
 
     def post(self, request, pk, format=None):
         """Add a new message to thread."""
-        return Response(status=status.HTTP_501_NOT_IMPLEMENTED)
+        thread = self.get_object(pk)
+        serializer = MessageSerializer(data=request.data)
+        if serializer.is_valid():
+            self.create_message(serializer, thread)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+    def create_message(self, serializer, thread):
+        serializer.save(author=self.request.user,
+                        thread=thread)
 
 
 

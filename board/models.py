@@ -22,6 +22,7 @@ class Message(models.Model):
     text = models.TextField()
     # id, url, author?
     author = models.ForeignKey('auth.User', related_name='messages')
+    thread = models.ForeignKey(Thread, related_name='messages')
     
     class Meta:
         ordering = ('created',)

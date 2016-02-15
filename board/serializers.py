@@ -3,12 +3,25 @@ from rest_framework import serializers
 from models import Thread, Message
 
 
-class ThreadSerializer(serializers.ModelSerializer):
+class MessageSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='pk', read_only=True)
     author = serializers.ReadOnlyField(source='author.username')
+    thread = serializers.PrimaryKeyRelatedField(queryset=Thread.objects.all(), required=False)
+    class Meta:
+        model = Message
+        fields = ('id', 'text', 'created', 'author', 'thread')
+        depth = 1
+
+
+class ThreadSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source='pk', read_only=True)
+    author = serializers.ReadOnlyField(source='author.username')
+    messages = MessageSerializer(many=True, required=False)
 
     class Meta:
         model = Thread
-        fields = ('id', 'title', 'created', 'author')
+        fields = ('id', 'title', 'created', 'author', 'messages')
+        depth = 1
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -17,10 +30,3 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'threads')
-
-
-class MessageSerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(source='author.username')
-    class Meta:
-        model = Message
-        fields = ('id', 'message', 'created', 'author')
