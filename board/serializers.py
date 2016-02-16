@@ -5,7 +5,7 @@ import hashlib
 
 
 class UserSerializer(serializers.ModelSerializer):
-    threads = serializers.PrimaryKeyRelatedField(many=True, queryset=Thread.objects.all())
+    #threads = serializers.PrimaryKeyRelatedField(many=True, queryset=Thread.objects.all())
     gravatar_url = serializers.SerializerMethodField()
 
     def get_gravatar_url(self, obj):
@@ -13,17 +13,17 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'threads', 'gravatar_url')
+        fields = ('id', 'username', 'gravatar_url')
 
 
 class MessageSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source='pk', read_only=True)
-    author = UserSerializer()
+    author = UserSerializer(required=False)
     thread = serializers.PrimaryKeyRelatedField(queryset=Thread.objects.all(), required=False)
+    
     class Meta:
         model = Message
         fields = ('id', 'text', 'created', 'author', 'thread')
-        depth = 1
 
 
 class ThreadSerializer(serializers.ModelSerializer):

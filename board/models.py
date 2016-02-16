@@ -6,7 +6,6 @@ from django.db import models
 class Thread(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=100, blank=False)
-    # url?
     author = models.ForeignKey('auth.User', related_name='threads')
     
     class Meta:
@@ -16,7 +15,6 @@ class Thread(models.Model):
 class Message(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
-    # id, url, author?
     author = models.ForeignKey('auth.User', related_name='messages')
     thread = models.ForeignKey(Thread, related_name='messages')
     

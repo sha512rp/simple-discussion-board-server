@@ -12,7 +12,7 @@ from rest_framework import permissions
 
 class ThreadList(APIView):
     """List all threads or create a new thread."""
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+    default_limit = 2
 
     def get(self, request, format=None):
         threads = Thread.objects.all()
@@ -32,8 +32,7 @@ class ThreadList(APIView):
 
 class ThreadDetail(APIView):
     """Retrieve, update or delete a thread instance."""
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
-
+    
     def get_object(self, pk):
         try:
             return Thread.objects.get(pk=pk)
@@ -74,17 +73,14 @@ class ThreadDetail(APIView):
 
 
 class MessageList(generics.ListCreateAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
 
 
 class MessageDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
 
 class UserList(generics.ListAPIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
     queryset = User.objects.all()
     serializer_class = UserSerializer
