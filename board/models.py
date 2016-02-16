@@ -13,10 +13,6 @@ class Thread(models.Model):
         ordering = ('created',)
 
 
-#class User(models.Model):
-#    username = models.CharField(max_length=30, blank=False)
-
-
 class Message(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
