@@ -23,6 +23,10 @@ class ThreadList(APIView):
         serializer = ThreadSerializer(data=request.data)
         if serializer.is_valid():
             self.perform_create(serializer)
+            msg_serializer = MessageSerializer(data=dict(text=request.data['text'],
+                                                         thread=serializer.data['id']))
+            if msg_serializer.is_valid():
+                msg_serializer.save(author=self.request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

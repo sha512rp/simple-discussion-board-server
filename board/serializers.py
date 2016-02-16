@@ -28,7 +28,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
 class ThreadSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source='pk', read_only=True)
-    author = UserSerializer()
+    author = UserSerializer(required=False)
     messages = MessageSerializer(many=True, required=False)
 
     class Meta:
