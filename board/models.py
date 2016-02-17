@@ -9,7 +9,7 @@ class Thread(models.Model):
     author = models.ForeignKey('auth.User', related_name='threads')
     
     class Meta:
-        ordering = ('created',)
+        ordering = ('-created',)
 
 
 class Message(models.Model):
